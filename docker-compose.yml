@@ -10,6 +10,24 @@ services:
             dockerfile: projects/OrderService/Dockerfile
         networks:
             - microservices_net
+    stockservice:
+        container_name: stock_service
+        environment:
+            - EASYNETQ_CONNECTION_STRING=host=rabbitmq;port=5672;virtualHost=/;username=guest;password=guest
+        build:
+            context: .
+            dockerfile: projects/StockService/Dockerfile
+        networks:
+            - microservices_net
+    shippingservice:
+        container_name: Shippings_Srvice
+        environment:
+            - EASYNETQ_CONNECTION_STRING=host=rabbitmq;port=5672;virtualHost=/;username=guest;password=guest
+        build:
+            context: .
+            dockerfile: projects/ShippingService/Dockerfile
+        networks:
+            - microservices_net
 
 networks:
     microservices_net:

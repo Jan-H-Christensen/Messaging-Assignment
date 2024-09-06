@@ -37,6 +37,13 @@ public class StockService
      * - Create a new order response with the stock status of the products
      * - Send the order response so the shipping service can calculate the shipping cost
      */
-    _messageClient.SendUsingTopic<OrderRequestMessage>(order, "order-response");
+
+    Console.WriteLine("HandleNewOrder Stock");
+    /*_messageClient.SendUsingTopic(new OrderRequestMessage
+    {
+        CustomerId = order.CustomerId,
+        Status = "Order received."
+    }, "OrderShippingCalculation");*/
+
   }
 }

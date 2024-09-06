@@ -68,7 +68,7 @@ public class MessageClient<TMessage>: IDisposable
         Send<T>(message, new SendReceiveStrategy(queue));
     }
     
-    public void SendUsingPubSub<T>(T message)
+    public void SendUsingPubSub<T>(T message, string v)
     {
         Send<T>(message, new PubSubStrategy(null));
     }
