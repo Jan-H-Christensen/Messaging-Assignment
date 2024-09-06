@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# 
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "projects\OrderService\OrderService.csproj", "{39BCD45B-9ACB-4557-A668-2E7FD9DAB886}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShippingService", "projects\ShippingService\ShippingService.csproj", "{EEFD2605-1AB6-4282-BBC0-099DD6181087}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockService", "projects\StockService\StockService.csproj", "{23E90F07-EF96-406A-A1D9-ABBA178E5A9D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messages", "packages\Messages\Messages.csproj", "{994D6EC5-679D-4F01-BD06-02C932F30DAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "packages\Repository\Repository.csproj", "{DF42DE26-9F64-4CCC-B38F-B59F2C9A84CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mapper", "packages\Mapper\Mapper.csproj", "{58A40500-2232-4F26-8F49-67984C99EE5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageClient", "packages\MessageClient\MessageClient.csproj", "{E93B2340-05C6-4CEA-9396-48E7E851C3F4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "projects", "projects", "{80F13653-35F9-4C9E-8B76-F5B1163D86E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreAPI", "projects\StoreAPI\StoreAPI.csproj", "{53103498-C639-4A2C-AC98-33DB706F829F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53103498-C639-4A2C-AC98-33DB706F829F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53103498-C639-4A2C-AC98-33DB706F829F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53103498-C639-4A2C-AC98-33DB706F829F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53103498-C639-4A2C-AC98-33DB706F829F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{53103498-C639-4A2C-AC98-33DB706F829F} = {80F13653-35F9-4C9E-8B76-F5B1163D86E9}
+	EndGlobalSection
+EndGlobal

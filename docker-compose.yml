@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+    orderservice:
+        container_name: order_service
+        environment:
+            - EASYNETQ_CONNECTION_STRING=host=rabbitmq;port=5672;virtualHost=/;username=guest;password=guest
+        build:
+            context: .
+            dockerfile: projects/OrderService/Dockerfile
+        networks:
+            - microservices_net
+
+networks:
+    microservices_net:
+        external: true
