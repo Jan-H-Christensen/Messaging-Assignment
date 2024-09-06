@@ -24,7 +24,8 @@ public class OrderService
     _newOrderClient.ConnectAndListen(HandleNewOrder);
 
     // Connect to the order completion topic
-    _orderCompletionClient.ConnectAndListen(HandleOrderCompletion);
+    _orderCompletionClient.ConnectAndListen(
+      HandleOrderCompletion);
   }
 
   private void HandleNewOrder(OrderRequestMessage order)
@@ -37,12 +38,22 @@ public class OrderService
      * - Create the order in the database (optional)
      * - Send the order to the stock service
      */
+    if (string.IsNullOrWhiteSpace(order.CustomerId))
+    {
+      var orderResponse = new OrderResponseMessage
+      {
+        CustomerId = order.CustomerId,
+        Status = "Order failed."
+      };
+
+      ApiResponseMessage(orderResponse);
+    }
 
     Console.WriteLine("HandleNewOrder Order");
     _newOrderClient.SendUsingTopic(new OrderRequestMessage
     {
-        CustomerId = order.CustomerId,
-        Status = "Order received."
+      CustomerId = order.CustomerId,
+      Status = "Order received."
     }, "NewOrderStock");
   }
 
@@ -55,7 +66,8 @@ public class OrderService
      * - Notify the customer
      */
 
-         // Create new OrderResponseMessage
+
+    // Create new OrderResponseMessage
     Console.WriteLine($"Received new order from customer {order.CustomerId}");
     var orderResponse = new OrderResponseMessage
     {
@@ -63,6 +75,14 @@ public class OrderService
       Status = "Order completed"
     };
 
+    // Send the order completion to the customer using the customer ID as the topic
+    Console.WriteLine($"Sending order completion to customer {orderResponse.CustomerId}");
+    _orderCompletionClient.SendUsingTopic<OrderResponseMessage>(orderResponse,
+        orderResponse.CustomerId);
+  }
+
+  private void ApiResponseMessage(OrderResponseMessage orderResponse)
+  {
     // Send the order completion to the customer using the customer ID as the topic
     Console.WriteLine($"Sending order completion to customer {orderResponse.CustomerId}");
     _orderCompletionClient.SendUsingTopic<OrderResponseMessage>(orderResponse,

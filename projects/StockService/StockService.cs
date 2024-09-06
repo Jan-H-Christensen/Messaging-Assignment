@@ -43,8 +43,8 @@ public class StockService
     Console.WriteLine("HandleNewOrder Stock");
     _messageClient.SendUsingTopic(new OrderRequestMessage
     {
-        CustomerId = order.CustomerId,
-        Status = "Order received."
+      CustomerId = order.CustomerId,
+      Status = "Order received."
     }, "newShippingOrder");
 
   }
