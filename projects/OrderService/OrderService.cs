@@ -30,62 +30,40 @@ public class OrderService
 
   private void HandleNewOrder(OrderRequestMessage order)
   {
-    //TODO: Handle the new orders
-
-    /*
-     * TODO: Handle new orders
-     * - Check if the order is valid
-     * - Create the order in the database (optional)
-     * - Send the order to the stock service
-     */
-    if (string.IsNullOrWhiteSpace(order.CustomerId))
+    if (order.propId <= 0)
     {
-      var orderResponse = new OrderResponseMessage
-      {
-        CustomerId = order.CustomerId,
-        Status = "Order failed."
+      var response = new OrderResponseMessage{
+        CustomerId = order.CustomerId, 
+        Status = "No product was given",
+        propId = order.propId,
+        PropAmount = order.PropAmount,
+        Price = order.Price
       };
-
-      ApiResponseMessage(orderResponse);
+      apiMessage(response);
     }
 
     Console.WriteLine("HandleNewOrder Order");
-    _newOrderClient.SendUsingTopic(new OrderRequestMessage
-    {
-      CustomerId = order.CustomerId,
-      Status = "Order received."
-    }, "NewOrderStock");
+    _newOrderClient.SendUsingTopic(order, "NewOrderStock");
   }
 
   private void HandleOrderCompletion(OrderRequestMessage order)
   {
-    //TODO: Handle the order completion, e.g. change the order status
-    /*
-     * TODO: Handle the order completion, e.g. change the order status
-     * - Update the order status in the database
-     * - Notify the customer
-     */
-
-
     // Create new OrderResponseMessage
     Console.WriteLine($"Received new order from customer {order.CustomerId}");
-    var orderResponse = new OrderResponseMessage
-    {
-      CustomerId = order.CustomerId,
-      Status = "Order completed"
+    var response = new OrderResponseMessage{
+      CustomerId = order.CustomerId, 
+      Status = "Order completed",
+      propId = order.propId,
+      PropAmount = order.PropAmount,
+      Price = order.Price
     };
-
-    // Send the order completion to the customer using the customer ID as the topic
-    Console.WriteLine($"Sending order completion to customer {orderResponse.CustomerId}");
-    _orderCompletionClient.SendUsingTopic<OrderResponseMessage>(orderResponse,
-        orderResponse.CustomerId);
+    apiMessage(response);
   }
 
-  private void ApiResponseMessage(OrderResponseMessage orderResponse)
+  private void apiMessage(OrderResponseMessage order)
   {
-    // Send the order completion to the customer using the customer ID as the topic
-    Console.WriteLine($"Sending order completion to customer {orderResponse.CustomerId}");
-    _orderCompletionClient.SendUsingTopic<OrderResponseMessage>(orderResponse,
-        orderResponse.CustomerId);
+    Console.WriteLine($"Sending order status to customer {order.CustomerId}");
+    _orderCompletionClient.SendUsingTopic<OrderResponseMessage>(order,
+    order.CustomerId);
   }
 }
