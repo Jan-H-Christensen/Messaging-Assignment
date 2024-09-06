@@ -15,6 +15,11 @@ public class ShippingService
     public void Start()
     {
         // TODO: Start listening for orders that need to be shipped
+        // Start listening for new orders
+        _newOrderClient.ConnectAndListen(HandleNewOrder);
+        
+        // Connect to the order completion topic
+        _orderCompletionClient.Connect();
     }
     
     private void HandleOrderShippingCalculation(OrderResponseMessage orderResponse)

@@ -9,13 +9,13 @@ public class StockService
 {
   private readonly MessageClient<OrderRequestMessage> _messageClient;
   private readonly ProductService _productService;
-  
+
   public StockService(MessageClient<OrderRequestMessage> messageClient, ProductService productService)
   {
     _messageClient = messageClient;
     _productService = productService;
   }
-  
+
   public void PopulateDb()
   {
     // Populate the database with some products
@@ -24,7 +24,8 @@ public class StockService
 
   public void Start()
   {
-    // TODO: Start listening for new orders
+    // connect to the order request topic
+    _messageClient.ConnectAndListen(HandleNewOrder);
   }
 
   private void HandleNewOrder(OrderRequestMessage order)
@@ -36,5 +37,6 @@ public class StockService
      * - Create a new order response with the stock status of the products
      * - Send the order response so the shipping service can calculate the shipping cost
      */
+    _messageClient.SendUsingTopic<OrderRequestMessage>(order, "order-response");
   }
 }
