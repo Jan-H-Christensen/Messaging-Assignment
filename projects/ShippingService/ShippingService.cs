@@ -5,9 +5,9 @@ namespace ShippingService;
 
 public class ShippingService
 {
-    private readonly MessageClient<OrderResponseMessage> _messageClient;
+    private readonly MessageClient<OrderRequestMessage> _messageClient;
     
-    public ShippingService(MessageClient<OrderResponseMessage> messageClient)
+    public ShippingService(MessageClient<OrderRequestMessage> messageClient)
     {
         _messageClient = messageClient;
     }
@@ -22,7 +22,7 @@ public class ShippingService
         _messageClient.Connect();
     }
     
-    private void HandleOrderShippingCalculation(OrderResponseMessage orderResponse)
+    private void HandleOrderShippingCalculation(OrderRequestMessage orderResponse)
     {
         /*
          * TODO: Handle the calculation of the shipping cost for the order
@@ -32,10 +32,19 @@ public class ShippingService
          */
 
         Console.WriteLine("HandleOrderShippingCalculation OrderShippingCalculation");
-        _messageClient.SendUsingTopic(new OrderRequestMessage
+        /*_messageClient.SendUsingTopic(new OrderRequestMessage
         {
             CustomerId = orderResponse.CustomerId,
             Status = "Order received."
-        }, "OrderCompletion");
+        }, "OrderCompletion");*/
+
+        var orderResponses = new OrderResponseMessage
+        {
+            CustomerId = orderResponse.CustomerId,
+            Status = "Order completed"
+        };
+        Console.WriteLine($"Sending order completion to customer {orderResponse.CustomerId}");
+        _messageClient.SendUsingTopic<OrderResponseMessage>(orderResponses,
+        "");
     }
 }
