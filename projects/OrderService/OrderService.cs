@@ -39,13 +39,11 @@ public class OrderService
      */
 
     Console.WriteLine("HandleNewOrder Order");
-    _newOrderClient.SendUsingPubSub(order.CustomerId, "NewOrder");
-    /*_newOrderClient.SendUsingTopic(new OrderRequestMessage
+    _newOrderClient.SendUsingTopic(new OrderRequestMessage
     {
         CustomerId = order.CustomerId,
         Status = "Order received."
     }, "NewOrderStock");
-*/
   }
 
   private void HandleOrderCompletion(OrderResponseMessage order)

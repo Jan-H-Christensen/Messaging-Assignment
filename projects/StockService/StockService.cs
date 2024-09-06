@@ -26,6 +26,8 @@ public class StockService
   {
     // connect to the order request topic
     _messageClient.ConnectAndListen(HandleNewOrder);
+
+    _messageClient.Connect();
   }
 
   private void HandleNewOrder(OrderRequestMessage order)
@@ -39,11 +41,11 @@ public class StockService
      */
 
     Console.WriteLine("HandleNewOrder Stock");
-    /*_messageClient.SendUsingTopic(new OrderRequestMessage
+    _messageClient.SendUsingTopic(new OrderRequestMessage
     {
         CustomerId = order.CustomerId,
         Status = "Order received."
-    }, "OrderShippingCalculation");*/
+    }, "newShippingOrder");
 
   }
 }

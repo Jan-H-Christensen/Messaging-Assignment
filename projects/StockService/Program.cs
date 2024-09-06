@@ -4,7 +4,7 @@
   {
     static void Main(string[] args)
     {
-      var stockService = StockServiceFactory.CreateStockService("");
+      var stockService = StockServiceFactory.CreateStockService("StockService");
       stockService.PopulateDb();
       stockService.Start();
       
