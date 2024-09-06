@@ -38,14 +38,26 @@ public class OrderService
      * - Send the order to the stock service
      */
 
-    // Create order in the DB
-    Console.WriteLine($"Creating the order in the database {order.CustomerId}");
-    var orderCreated = _orderService.CreateOrder(order);
-    // Send the order to the stock service
-    Console.WriteLine($"Sending new order to stock service {order.CustomerId}");
+    Console.WriteLine("HandleNewOrder Order");
+    _newOrderClient.SendUsingPubSub(order.CustomerId, "NewOrder");
+    /*_newOrderClient.SendUsingTopic(new OrderRequestMessage
+    {
+        CustomerId = order.CustomerId,
+        Status = "Order received."
+    }, "NewOrderStock");
+*/
+  }
 
+  private void HandleOrderCompletion(OrderResponseMessage order)
+  {
+    //TODO: Handle the order completion, e.g. change the order status
+    /*
+     * TODO: Handle the order completion, e.g. change the order status
+     * - Update the order status in the database
+     * - Notify the customer
+     */
 
-    // Create new OrderResponseMessage
+         // Create new OrderResponseMessage
     Console.WriteLine($"Received new order from customer {order.CustomerId}");
     var orderResponse = new OrderResponseMessage
     {
@@ -57,15 +69,5 @@ public class OrderService
     Console.WriteLine($"Sending order completion to customer {orderResponse.CustomerId}");
     _orderCompletionClient.SendUsingTopic<OrderResponseMessage>(orderResponse,
         orderResponse.CustomerId);
-  }
-
-  private void HandleOrderCompletion(OrderResponseMessage order)
-  {
-    //TODO: Handle the order completion, e.g. change the order status
-    /*
-     * TODO: Handle the order completion, e.g. change the order status
-     * - Update the order status in the database
-     * - Notify the customer
-     */
   }
 }

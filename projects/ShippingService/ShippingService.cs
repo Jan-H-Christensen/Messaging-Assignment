@@ -16,10 +16,10 @@ public class ShippingService
     {
         // TODO: Start listening for orders that need to be shipped
         // Start listening for new orders
-        _newOrderClient.ConnectAndListen(HandleNewOrder);
+        _messageClient.ConnectAndListen(HandleOrderShippingCalculation);
         
         // Connect to the order completion topic
-        _orderCompletionClient.Connect();
+        _messageClient.Connect();
     }
     
     private void HandleOrderShippingCalculation(OrderResponseMessage orderResponse)
@@ -30,5 +30,12 @@ public class ShippingService
          * - Change the status of the order and apply the shipping cost
          * - Send the processed order to the order service for completion
          */
+
+        Console.WriteLine("HandleOrderShippingCalculation OrderShippingCalculation");
+        _messageClient.SendUsingTopic(new OrderRequestMessage
+        {
+            CustomerId = orderResponse.CustomerId,
+            Status = "Order received."
+        }, "OrderCompletion");
     }
 }
