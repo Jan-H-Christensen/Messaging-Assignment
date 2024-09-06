@@ -34,9 +34,10 @@ public class StockService
   {
     var prodTest = _productService.GetProducts().FirstOrDefault(p => p.Id == order.propId);
 
+
     if (order.PropAmount >= 0 && prodTest != null)
     {
-      if ((prodTest.Stock-order.PropAmount) >= 0)
+      if ((prodTest.Stock - order.PropAmount) >= 0)
       {
         prodTest.Stock -= order.PropAmount;
         Console.WriteLine("HandleNewOrder Stock");
@@ -59,8 +60,9 @@ public class StockService
     }
     else
     {
-      var response = new OrderResponseMessage{
-        CustomerId = order.CustomerId, 
+      var response = new OrderResponseMessage
+      {
+        CustomerId = order.CustomerId,
         Status = "No product was given/Found",
         propId = order.propId,
         PropAmount = order.PropAmount,
@@ -72,8 +74,9 @@ public class StockService
 
   private void apiMessage(OrderResponseMessage order)
   {
-    Console.WriteLine($"Sending order status to customer {order.CustomerId}");
+    Console.WriteLine($"Sending order status to customer {order.CustomerId} status {order.Status}");
     _messageClient.SendUsingTopic<OrderResponseMessage>(order,
     order.CustomerId);
+
   }
 }
