@@ -13,13 +13,15 @@ public static class StockServiceFactory
   {
     var easyNetQFactory = new EasyNetQFactory();
     var messageClient = easyNetQFactory.CreateTopicMessageClient<OrderRequestMessage>(queueName, "NewOrderStock");
+    var apiOrderFailure = easyNetQFactory.CreatePubSubMessageClient<OrderResponseMessage>("");
 
     var productRepository = new ProductRepository(new DataContext());
     var productService = new ProductService(productRepository);
 
     return new StockService(
       messageClient,
-      productService
+      productService,
+      apiOrderFailure
     );
   }
 }
