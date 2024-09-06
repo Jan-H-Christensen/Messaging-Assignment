@@ -12,8 +12,10 @@ builder.Services.AddSingleton<MessageClient<OrderResponseMessage>>(easyNetQFacto
 builder.Services.AddSingleton<MessageClient<OrderResponseMessage>>(easyNetQFactory.CreatePubSubMessageClient<OrderResponseMessage>("StoreAPI").Connect());
 builder.Services.AddSingleton<MessageClient<OrderResponseMessage>>(easyNetQFactory.CreateTopicMessageClient<OrderResponseMessage>("OrderService", "newOrder").Connect());
 builder.Services.AddSingleton<MessageClient<OrderResponseMessage>>(easyNetQFactory.CreateTopicMessageClient<OrderResponseMessage>("OrderService", "orderCompletion").Connect());
+builder.Services.AddSingleton<MessageClient<OrderResponseMessage>>(easyNetQFactory.CreatePubSubMessageClient<OrderResponseMessage>("OrderService").Connect());
 builder.Services.AddSingleton<MessageClient<OrderRequestMessage>>(easyNetQFactory.CreateTopicMessageClient<OrderRequestMessage>("ShippingService", "newShippingOrder").Connect());
 builder.Services.AddSingleton<MessageClient<OrderRequestMessage>>(easyNetQFactory.CreateTopicMessageClient<OrderRequestMessage>("StockService", "NewOrderStock").Connect());
+builder.Services.AddSingleton<MessageClient<OrderResponseMessage>>(easyNetQFactory.CreatePubSubMessageClient<OrderResponseMessage>("StockService").Connect());
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

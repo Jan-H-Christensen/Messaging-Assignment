@@ -8,12 +8,14 @@ using MessageClient;
 public class StockService
 {
   private readonly MessageClient<OrderRequestMessage> _messageClient;
+  private readonly MessageClient<OrderResponseMessage> _apiOrderFailure;
   private readonly ProductService _productService;
 
-  public StockService(MessageClient<OrderRequestMessage> messageClient, ProductService productService)
+  public StockService(MessageClient<OrderRequestMessage> messageClient, ProductService productService,MessageClient<OrderResponseMessage> apiOrderFailure)
   {
     _messageClient = messageClient;
     _productService = productService;
+    _apiOrderFailure = apiOrderFailure;
   }
 
   public void PopulateDb()
@@ -27,7 +29,7 @@ public class StockService
     // connect to the order request topic
     _messageClient.ConnectAndListen(HandleNewOrder);
 
-    _messageClient.Connect();
+    _apiOrderFailure.Connect();
   }
 
   private void HandleNewOrder(OrderRequestMessage order)
@@ -75,7 +77,7 @@ public class StockService
   private void apiMessage(OrderResponseMessage order)
   {
     Console.WriteLine($"Sending order status to customer {order.CustomerId} status {order.Status}");
-    _messageClient.SendUsingTopic<OrderResponseMessage>(order,
+    _apiOrderFailure.SendUsingTopic<OrderResponseMessage>(order,
     order.CustomerId);
 
   }

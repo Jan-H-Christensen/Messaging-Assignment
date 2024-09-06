@@ -8,14 +8,16 @@ public class OrderService
 {
   private readonly MessageClient<OrderRequestMessage> _newOrderClient;
   private readonly MessageClient<OrderRequestMessage> _orderCompletionClient;
+  private readonly MessageClient<OrderResponseMessage> _apiOrderCompletionClient;
   private readonly Core.Services.OrderService _orderService;
   private readonly OrderResponseMapper _orderResponseMapper;
-  public OrderService(MessageClient<OrderRequestMessage> newOrderClient, MessageClient<OrderRequestMessage> orderCompletionClient, Core.Services.OrderService orderService, OrderResponseMapper orderResponseMapper)
+  public OrderService(MessageClient<OrderRequestMessage> newOrderClient, MessageClient<OrderRequestMessage> orderCompletionClient, MessageClient<OrderResponseMessage> apiOrderCompletionClient, Core.Services.OrderService orderService, OrderResponseMapper orderResponseMapper)
   {
     _newOrderClient = newOrderClient;
     _orderCompletionClient = orderCompletionClient;
     _orderService = orderService;
     _orderResponseMapper = orderResponseMapper;
+    _apiOrderCompletionClient = apiOrderCompletionClient;
   }
 
   public void Start()
@@ -24,8 +26,9 @@ public class OrderService
     _newOrderClient.ConnectAndListen(HandleNewOrder);
 
     // Connect to the order completion topic
-    _orderCompletionClient.ConnectAndListen(
-      HandleOrderCompletion);
+    _orderCompletionClient.ConnectAndListen(HandleOrderCompletion);
+
+    _apiOrderCompletionClient.Connect();
   }
 
   private void HandleNewOrder(OrderRequestMessage order)
@@ -69,7 +72,7 @@ public class OrderService
   private void apiMessage(OrderResponseMessage order)
   {
     Console.WriteLine($"Sending order status to customer {order.CustomerId}");
-    _orderCompletionClient.SendUsingTopic<OrderResponseMessage>(order,
+    _apiOrderCompletionClient.SendUsingTopic<OrderResponseMessage>(order,
     order.CustomerId);
   }
 }
