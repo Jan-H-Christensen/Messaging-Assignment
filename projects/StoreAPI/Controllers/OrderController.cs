@@ -42,6 +42,11 @@ public class OrderController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<string>> PostOrder(Order order)
     {
+        if (string.IsNullOrWhiteSpace(order.CustomerId))
+        {
+            return "No Costumer Id provided";
+        }
+        else{
         // Sends new order request message using 'newOrder' topic
         _orderRequestMessageClient.SendUsingTopic(new OrderRequestMessage
         {
@@ -54,5 +59,6 @@ public class OrderController : ControllerBase
         
         // Returns the status of the order
         return response != null ? response.Status : "Order timed out.";
+        }
     }
 }

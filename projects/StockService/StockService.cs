@@ -32,20 +32,48 @@ public class StockService
 
   private void HandleNewOrder(OrderRequestMessage order)
   {
-    // TODO: Handle the new orders
-    /*
-     * TODO: Handle new orders
-     * - Check the stock of the products in the order
-     * - Create a new order response with the stock status of the products
-     * - Send the order response so the shipping service can calculate the shipping cost
-     */
+    var prodTest = _productService.GetProducts().FirstOrDefault(p => p.Id == order.propId);
 
-    Console.WriteLine("HandleNewOrder Stock");
-    _messageClient.SendUsingTopic(new OrderRequestMessage
+    if (order.PropAmount >= 0 && prodTest != null)
     {
-      CustomerId = order.CustomerId,
-      Status = "Order received."
-    }, "newShippingOrder");
+      if ((prodTest.Stock-order.PropAmount) >= 0)
+      {
+        prodTest.Stock -= order.PropAmount;
+        Console.WriteLine("HandleNewOrder Stock");
+        order.Status = "Order Stock Ready";
+        order.Price = prodTest.Price;
+        _messageClient.SendUsingTopic(order, "newShippingOrder");
+      }
+      else
+      {
+        var response = new OrderResponseMessage
+        {
+          CustomerId = order.CustomerId,
+          Status = "Not enough stock",
+          propId = order.propId,
+          PropAmount = order.PropAmount,
+          Price = order.Price
+        };
+        apiMessage(response);
+      }
+    }
+    else
+    {
+      var response = new OrderResponseMessage{
+        CustomerId = order.CustomerId, 
+        Status = "No product was given/Found",
+        propId = order.propId,
+        PropAmount = order.PropAmount,
+        Price = order.Price
+      };
+      apiMessage(response);
+    }
+  }
 
+  private void apiMessage(OrderResponseMessage order)
+  {
+    Console.WriteLine($"Sending order status to customer {order.CustomerId}");
+    _messageClient.SendUsingTopic<OrderResponseMessage>(order,
+    order.CustomerId);
   }
 }
