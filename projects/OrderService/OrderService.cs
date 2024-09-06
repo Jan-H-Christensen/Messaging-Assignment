@@ -7,10 +7,10 @@ namespace OrderService;
 public class OrderService
 {
   private readonly MessageClient<OrderRequestMessage> _newOrderClient;
-  private readonly MessageClient<OrderResponseMessage> _orderCompletionClient;
+  private readonly MessageClient<OrderRequestMessage> _orderCompletionClient;
   private readonly Core.Services.OrderService _orderService;
   private readonly OrderResponseMapper _orderResponseMapper;
-  public OrderService(MessageClient<OrderRequestMessage> newOrderClient, MessageClient<OrderResponseMessage> orderCompletionClient, Core.Services.OrderService orderService, OrderResponseMapper orderResponseMapper)
+  public OrderService(MessageClient<OrderRequestMessage> newOrderClient, MessageClient<OrderRequestMessage> orderCompletionClient, Core.Services.OrderService orderService, OrderResponseMapper orderResponseMapper)
   {
     _newOrderClient = newOrderClient;
     _orderCompletionClient = orderCompletionClient;
@@ -24,7 +24,7 @@ public class OrderService
     _newOrderClient.ConnectAndListen(HandleNewOrder);
 
     // Connect to the order completion topic
-    _orderCompletionClient.Connect();
+    _orderCompletionClient.ConnectAndListen(HandleOrderCompletion);
   }
 
   private void HandleNewOrder(OrderRequestMessage order)
@@ -46,7 +46,7 @@ public class OrderService
     }, "NewOrderStock");
   }
 
-  private void HandleOrderCompletion(OrderResponseMessage order)
+  private void HandleOrderCompletion(OrderRequestMessage order)
   {
     //TODO: Handle the order completion, e.g. change the order status
     /*

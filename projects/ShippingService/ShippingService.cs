@@ -38,13 +38,10 @@ public class ShippingService
             Status = "Order received."
         }, "OrderCompletion");*/
 
-        var orderResponses = new OrderResponseMessage
+        _messageClient.SendUsingTopic(new OrderRequestMessage
         {
             CustomerId = orderResponse.CustomerId,
-            Status = "Order completed"
-        };
-        Console.WriteLine($"Sending order completion to customer {orderResponse.CustomerId}");
-        _messageClient.SendUsingTopic<OrderResponseMessage>(orderResponses,
-        "");
+            Status = "Order received."
+        }, "orderCompletion");
     }
 }
