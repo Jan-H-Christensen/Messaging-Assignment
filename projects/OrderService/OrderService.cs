@@ -32,13 +32,17 @@ public class OrderService
   {
     if (order.propId <= 0)
     {
-      var response = new OrderResponseMessage{
-        CustomerId = order.CustomerId, 
+      var response = new OrderResponseMessage
+      {
+        CustomerId = order.CustomerId,
         Status = "No product was given",
         propId = order.propId,
         PropAmount = order.PropAmount,
         Price = order.Price
       };
+
+      Console.WriteLine("no Product was given");
+
       apiMessage(response);
     }
 
@@ -49,14 +53,16 @@ public class OrderService
   private void HandleOrderCompletion(OrderRequestMessage order)
   {
     // Create new OrderResponseMessage
-    Console.WriteLine($"Received new order from customer {order.CustomerId}");
-    var response = new OrderResponseMessage{
-      CustomerId = order.CustomerId, 
+    Console.WriteLine($"Completed order from customer {order.CustomerId}");
+    var response = new OrderResponseMessage
+    {
+      CustomerId = order.CustomerId,
       Status = "Order completed",
       propId = order.propId,
       PropAmount = order.PropAmount,
       Price = order.Price
     };
+
     apiMessage(response);
   }
 
